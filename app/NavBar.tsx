@@ -16,7 +16,7 @@ const NavBar = () => {
       <ul className="flex space-x-6">
         {links.map((link) => (
           <Link
-            key={`${link.label}-${link.href}`} /* need to use both fields tfor unique key*/
+            key={`${link.label}-${link.href}`} /* need to use both fields for unique key*/
             className="text-zinc-500 hover:text-zinc-800 transition-colors"
             href={link.href}
           >
