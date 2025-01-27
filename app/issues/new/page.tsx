@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 /*import SimpleMDE from "react-simplemde-editor"; */
 import "easymde/dist/easymde.min.css";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
 /*import { PiPlaceholder } from "react-icons/pi";*/
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Issueschema } from "@/app/validationschema";
 import { z } from "zod";
 import ErrorMessage from "../../components/ErrorMessage";
+import { Spinnaker } from "next/font/google";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false, // Disable server-side rendering for this component
@@ -35,7 +36,7 @@ const NewIssuepage = () => {
   });
   console.log(register("title"), control, handleSubmit);
   const [error, setError] = useState("");
-
+  const [isSubmitting, setSubmitting] = useState(false);
   return (
     <div className="max-w-xl">
       <ErrorMessage>{errors.title?.message}</ErrorMessage>
@@ -43,9 +44,11 @@ const NewIssuepage = () => {
         className="max-w-xl space-y-3"
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             await axios.post("/api/issues", data);
             router.push("/issues");
           } catch (error) {
+            setSubmitting(false);
             setError("An unexpected error has occurred.");
           }
         })}
@@ -66,7 +69,10 @@ const NewIssuepage = () => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button type="submit">Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue
+          {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
