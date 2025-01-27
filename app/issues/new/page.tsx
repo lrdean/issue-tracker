@@ -11,6 +11,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Issueschema } from "@/app/validationschema";
 import { z } from "zod";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false, // Disable server-side rendering for this component
@@ -37,7 +38,7 @@ const NewIssuepage = () => {
 
   return (
     <div className="max-w-xl">
-      <ErrorMessage>{errors.title?,message}</ErrorMessage>}
+      <ErrorMessage>{errors.title?.message}</ErrorMessage>
       <form
         className="max-w-xl space-y-3"
         onSubmit={handleSubmit(async (data) => {
@@ -63,10 +64,7 @@ const NewIssuepage = () => {
             />
           )}
         />
-        <ErrorMessage>
-          {errors.description?.message}
-        </ErrorMessage>
-        
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
         <Button type="submit">Submit New Issue</Button>
       </form>
